@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dua & Azkar Prototype</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --bg-color: #006064;
+            --header-color: #00838F;
+            --card-morning: #FFD54F;
+            --card-evening: #4FC3F7;
+            --card-after-prayer: #66BB6A;
+            --card-before-sleep: #AB47BC;
+            --card-daily: #EF5350;
+            --card-protection: #FF7043;
+            --card-travel: #26C6DA;
+            --card-food: #FFA726;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            background-color: #f5f5f5;
+            display: flex;
+            justify-content: center;
+        }
+
+        .phone-container {
+            width: 375px;
+            height: 812px;
+            background-color: white;
+            box-shadow: 0 0 20px rgba(0,0,0,0.2);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+
+        header {
+            background-color: var(--header-color);
+            color: white;
+            padding: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 1.2rem;
+        }
+
+        .header-icons i {
+            margin-left: 15px;
+            cursor: pointer;
+        }
+
+        .content {
+            flex: 1;
+            padding: 15px;
+            overflow-y: auto;
+            background-color: #f0f0f0;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        .card {
+            border-radius: 12px;
+            padding: 20px 10px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            color: white;
+            text-align: center;
+            cursor: pointer;
+            transition: transform 0.1s;
+            position: relative;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .card:active {
+            transform: scale(0.95);
+        }
+
+        .card i {
+            font-size: 2rem;
+            margin-bottom: 10px;
+        }
+
+        .card .title {
+            font-weight: bold;
+            font-size: 0.9rem;
+        }
+
+        .card .arabic {
+            font-size: 0.8rem;
+            margin-top: 5px;
+        }
+
+        .card .urdu {
+            font-size: 0.7rem;
+            margin-top: 2px;
+            opacity: 0.9;
+        }
+
+        .card .counter-badge {
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 10px;
+            padding: 2px 10px;
+            font-size: 0.7rem;
+            margin-top: 10px;
+        }
+
+        /* Detail View Overlay */
+        #detail-view {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: white;
+            z-index: 100;
+            display: none;
+            flex-direction: column;
+        }
+
+        .detail-header {
+            background-color: var(--header-color);
+            color: white;
+            padding: 15px;
+            display: flex;
+            align-items: center;
+        }
+
+        .detail-header i {
+            margin-right: 15px;
+            cursor: pointer;
+        }
+
+        .detail-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .detail-content .arabic-big {
+            font-size: 2rem;
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        .counter-circle {
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            border: 10px solid var(--header-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 4rem;
+            font-weight: bold;
+            margin-bottom: 30px;
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .detail-controls {
+            display: flex;
+            gap: 20px;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border-radius: 5px;
+            border: none;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .btn-reset { background-color: #ddd; }
+        .btn-back { background-color: var(--header-color); color: white; }
+
+    </style>
+</head>
+<body>
+
+<div class="phone-container">
+    <header>
+        <h1>Dua & Azkar</h1>
+        <div class="header-icons">
+            <i class="fas fa-search"></i>
+            <i class="fas fa-heart"></i>
+            <i class="fas fa-cog"></i>
+        </div>
+    </header>
+
+    <div class="content">
+        <div class="grid" id="main-grid">
+            <!-- Cards will be injected here -->
+        </div>
+    </div>
+
+    <!-- Detail View -->
+    <div id="detail-view">
+        <div class="detail-header">
+            <i class="fas fa-arrow-left" onclick="closeDetail()"></i>
+            <h1 id="detail-title">Morning Azkar</h1>
+        </div>
+        <div class="detail-content">
+            <div class="arabic-big" id="detail-arabic">أذكار الصباح</div>
+            <div class="counter-circle" id="counter-display" onclick="incrementCurrent()">0</div>
+            <div id="detail-urdu">صبح کے اذکار</div>
+            <p>Target: <span id="detail-target">33</span></p>
+            <div class="detail-controls">
+                <button class="btn btn-reset" onclick="resetCurrent()">Reset</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    const azkarData = [
+        { id: 0, title: "Morning Azkar", arabic: "أذكار الصباح", urdu: "صبح کے اذکار", icon: "fa-sun", color: "var(--card-morning)", count: 15, target: 33 },
+        { id: 1, title: "Evening Azkar", arabic: "أذكار المساء", urdu: "شام کے اذکار", icon: "fa-moon", color: "var(--card-evening)", count: 9, target: 33 },
+        { id: 2, title: "After Prayer", arabic: "بعد الصلاة", urdu: "نماز کے بعد کے اذکار", icon: "fa-mosque", color: "var(--card-after-prayer)", count: 10, target: 33 },
+        { id: 3, title: "Before Sleep", arabic: "قبل النوم", urdu: "سونے سے پہلے کے اذکار", icon: "fa-bed", color: "var(--card-before-sleep)", count: 6, target: 33 },
+        { id: 4, title: "Daily Duas", arabic: "دعاء يومية", urdu: "روزانہ کی دعائیں", icon: "fa-calendar-alt", color: "var(--card-daily)", count: 10, target: 100 },
+        { id: 5, title: "Protection Duas", arabic: "دعاء الحماية", urdu: "حفاظت کی دعائیں", icon: "fa-shield-alt", color: "var(--card-protection)", count: 6, target: 100 },
+        { id: 6, title: "Travel Duas", arabic: "دعاء السفر", urdu: "سفر کی دعائیں", icon: "fa-plane", color: "var(--card-travel)", count: 0, target: 33 },
+        { id: 7, title: "Food & Drink", arabic: "أذكار الطعام", urdu: "کھانے پینے کے اذکار", icon: "fa-utensils", color: "var(--card-food)", count: 0, target: 33 }
+    ];
+
+    let currentActiveIndex = -1;
+
+    function renderGrid() {
+        const grid = document.getElementById('main-grid');
+        grid.innerHTML = '';
+        azkarData.forEach((item, index) => {
+            const card = document.createElement('div');
+            card.className = 'card';
+            card.style.backgroundColor = item.color;
+            card.onclick = () => openDetail(index);
+            card.innerHTML = `
+                <i class="fas ${item.icon}"></i>
+                <div class="title">${item.title}</div>
+                <div class="arabic">${item.arabic}</div>
+                <div class="urdu">${item.urdu}</div>
+                <div class="counter-badge">${item.count}</div>
+            `;
+            grid.appendChild(card);
+        });
+    }
+
+    function openDetail(index) {
+        currentActiveIndex = index;
+        const item = azkarData[index];
+        document.getElementById('detail-title').innerText = item.title;
+        document.getElementById('detail-arabic').innerText = item.arabic;
+        document.getElementById('detail-urdu').innerText = item.urdu;
+        document.getElementById('detail-target').innerText = item.target;
+        document.getElementById('counter-display').innerText = item.count;
+        document.getElementById('detail-view').style.display = 'flex';
+    }
+
+    function closeDetail() {
+        document.getElementById('detail-view').style.display = 'none';
+        renderGrid();
+    }
+
+    function incrementCurrent() {
+        if (currentActiveIndex === -1) return;
+        azkarData[currentActiveIndex].count++;
+        document.getElementById('counter-display').innerText = azkarData[currentActiveIndex].count;
+
+        // Target haptic feedback feel (visual)
+        if(azkarData[currentActiveIndex].count % azkarData[currentActiveIndex].target === 0) {
+            document.getElementById('counter-display').style.borderColor = 'gold';
+            setTimeout(() => {
+                document.getElementById('counter-display').style.borderColor = 'var(--header-color)';
+            }, 500);
+        }
+    }
+
+    function resetCurrent() {
+        if (currentActiveIndex === -1) return;
+        azkarData[currentActiveIndex].count = 0;
+        document.getElementById('counter-display').innerText = 0;
+    }
+
+    renderGrid();
+</script>
+
+</body>
+</html>
