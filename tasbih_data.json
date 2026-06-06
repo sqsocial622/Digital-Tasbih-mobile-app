@@ -1,0 +1,34 @@
+{
+    "counters": [
+        {
+            "name": "SubhanAllah",
+            "current_count": 0,
+            "target": 33,
+            "history": []
+        },
+        {
+            "name": "Alhamdulillah",
+            "current_count": 0,
+            "target": 33,
+            "history": []
+        },
+        {
+            "name": "Allahu Akbar",
+            "current_count": 0,
+            "target": 33,
+            "history": []
+        },
+        {
+            "name": "La ilaha illallah",
+            "current_count": 0,
+            "target": 100,
+            "history": []
+        },
+        {
+            "name": "Astaghfirullah",
+            "current_count": 0,
+            "target": 100,
+            "history": []
+        }
+    ]
+}

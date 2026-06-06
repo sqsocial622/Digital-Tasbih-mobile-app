@@ -1,0 +1,4 @@
+__pycache__/
+*.pyc
+tasbih_data.json
+test_tasbih_data.json
