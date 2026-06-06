@@ -1,4 +1,13 @@
 __pycache__/
 *.pyc
-tasbih_data.json
-test_tasbih_data.json
+tasbih/
+pos/
+pos_app/build/
+pos_app/.dart_tool/
+pos_app/android/
+pos_app/ios/
+pos_app/linux/
+pos_app/macos/
+pos_app/windows/
+pos_app/web/
+analyze_output.txt
